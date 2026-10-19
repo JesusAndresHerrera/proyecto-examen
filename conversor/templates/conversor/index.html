@@ -1,0 +1,178 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Convierte números entre cuatro bases y analiza caracteres Unicode y sus bytes UTF-8.">
+    <title>Analizador de representación de datos</title>
+    <link rel="stylesheet" href="{% static 'conversor/styles.css' %}">
+</head>
+<body>
+    <a class="skip-link" href="#contenido">Ir al contenido</a>
+
+    <header class="page-header">
+        <div class="container">
+            <p class="eyebrow">Arquitectura de computadoras</p>
+            <h1>Analizador de representación de datos</h1>
+            <p class="introduction">Un mismo dato puede escribirse de distintas formas. Convierte un número o descubre cómo se representa un texto en Unicode y UTF-8.</p>
+        </div>
+    </header>
+
+    <main id="contenido" class="container">
+        {% if error_accion %}
+            <p class="error-summary" role="alert">{{ error_accion }}</p>
+        {% endif %}
+
+        <div class="forms-grid">
+            <section id="numero" class="panel" aria-labelledby="titulo-numero">
+                <div class="section-heading">
+                    <span class="section-number" aria-hidden="true">01</span>
+                    <div>
+                        <h2 id="titulo-numero">Analizar un número</h2>
+                        <p>Elige la base en la que está escrito.</p>
+                    </div>
+                </div>
+
+                <form method="post" action="{% url 'conversor:analizar' %}#numero" novalidate>
+                    {% csrf_token %}
+                    <input type="hidden" name="accion" value="numero">
+
+                    {% if form_numero.non_field_errors %}
+                        <div class="error-summary" role="alert">{{ form_numero.non_field_errors }}</div>
+                    {% endif %}
+
+                    <div class="field">
+                        <label for="{{ form_numero.numero.id_for_label }}">Número</label>
+                        {{ form_numero.numero }}
+                        <p id="ayuda-numero" class="field-help">Por ejemplo: 1010 en base 2 o FF en base 16. No agregues prefijos como 0b o 0x.</p>
+                        {% for error in form_numero.numero.errors %}
+                            <p class="field-error" role="alert">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+
+                    <div class="field">
+                        <label for="{{ form_numero.base.id_for_label }}">Base de origen</label>
+                        {{ form_numero.base }}
+                        {% for error in form_numero.base.errors %}
+                            <p class="field-error" role="alert">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+
+                    <button type="submit">Analizar número <span aria-hidden="true">→</span></button>
+                    <p class="form-note">Se aceptan valores entre 0 y 65 535.</p>
+                </form>
+            </section>
+
+            <section id="texto" class="panel" aria-labelledby="titulo-texto">
+                <div class="section-heading">
+                    <span class="section-number" aria-hidden="true">02</span>
+                    <div>
+                        <h2 id="titulo-texto">Analizar un texto</h2>
+                        <p>Consulta los códigos y bytes de cada carácter.</p>
+                    </div>
+                </div>
+
+                <form method="post" action="{% url 'conversor:analizar' %}#texto" novalidate>
+                    {% csrf_token %}
+                    <input type="hidden" name="accion" value="texto">
+
+                    {% if form_texto.non_field_errors %}
+                        <div class="error-summary" role="alert">{{ form_texto.non_field_errors }}</div>
+                    {% endif %}
+
+                    <div class="field">
+                        <label for="{{ form_texto.texto.id_for_label }}">Texto</label>
+                        {{ form_texto.texto }}
+                        <p id="ayuda-texto" class="field-help">Escribe hasta 20 caracteres. Prueba con Año para ver cómo se codifica la ñ.</p>
+                        {% for error in form_texto.texto.errors %}
+                            <p class="field-error" role="alert">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+
+                    <button type="submit">Analizar texto <span aria-hidden="true">→</span></button>
+                    <p class="form-note">Los espacios también cuentan como caracteres.</p>
+                </form>
+            </section>
+        </div>
+
+        {% if resultado_numero %}
+            <section class="panel result-panel" aria-labelledby="titulo-resultado-numero">
+                <div class="result-heading">
+                    <div>
+                        <p class="eyebrow">Resultado del número</p>
+                        <h2 id="titulo-resultado-numero"><span class="number-value">{{ resultado_numero.original }}</span> en base {{ resultado_numero.base }}</h2>
+                    </div>
+                    <span class="result-badge">Conversión válida</span>
+                </div>
+
+                <dl class="number-results">
+                    <div><dt>Decimal · base 10</dt><dd>{{ resultado_numero.decimal }}</dd></div>
+                    <div class="binary-result"><dt>Binario · base 2</dt><dd>{{ resultado_numero.binario }}</dd></div>
+                    <div><dt>Octal · base 8</dt><dd>{{ resultado_numero.octal }}</dd></div>
+                    <div><dt>Hexadecimal · base 16</dt><dd>{{ resultado_numero.hexadecimal }}</dd></div>
+                    <div><dt>Bits significativos</dt><dd>{{ resultado_numero.bits }}</dd></div>
+                    <div><dt>Bytes necesarios</dt><dd>{{ resultado_numero.bytes }}</dd></div>
+                </dl>
+                <p class="explanation">El binario se completa con ceros a la izquierda hasta llegar a 8 o 16 bits. Un byte contiene 8 bits. Los bytes indicados representan el número, no la memoria que consume la aplicación.</p>
+                {% if resultado_numero.decimal == 0 %}
+                    <p class="explanation">Para el cero se usan 0 bits significativos y un byte: <code>00000000</code>.</p>
+                {% endif %}
+            </section>
+        {% endif %}
+
+        {% if resultado_texto %}
+            <section class="panel result-panel" aria-labelledby="titulo-resultado-texto">
+                <div class="result-heading">
+                    <div>
+                        <p class="eyebrow">Resultado del texto</p>
+                        <h2 id="titulo-resultado-texto">Cada carácter, paso a paso</h2>
+                    </div>
+                    <span class="result-badge">{{ resultado_texto|length }} punto{{ resultado_texto|length|pluralize:"s" }} de código</span>
+                </div>
+
+                <div class="table-scroll" tabindex="0" role="region" aria-label="Tabla de caracteres; desplázate horizontalmente si hace falta">
+                    <table>
+                        <caption>Códigos Unicode y bytes UTF-8 del texto ingresado</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Carácter</th>
+                                <th scope="col">Decimal</th>
+                                <th scope="col">Punto de código</th>
+                                <th scope="col">Hexadecimal</th>
+                                <th scope="col">Bytes UTF-8</th>
+                                <th scope="col">Cantidad de bytes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for fila in resultado_texto %}
+                                <tr>
+                                    <th scope="row"><span class="character">{{ fila.etiqueta }}</span></th>
+                                    <td>{{ fila.decimal }}</td>
+                                    <td><code>{{ fila.punto_codigo }}</code></td>
+                                    <td><code>{{ fila.hexadecimal }}</code></td>
+                                    <td><code>{{ fila.bytes_utf8 }}</code></td>
+                                    <td>{{ fila.cantidad_bytes }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <p class="explanation">Unicode asigna un código a cada carácter. UTF-8 indica cómo escribir ese código en bytes. Por ejemplo, ñ tiene el punto de código <code>U+00F1</code> y se guarda en UTF-8 como <code>C3 B1</code>.</p>
+            </section>
+        {% endif %}
+
+        <aside class="learning-note" aria-labelledby="titulo-ayuda">
+            <h2 id="titulo-ayuda">Para entender los resultados</h2>
+            <div class="learning-grid">
+                <p><strong>Las bases cambian la escritura.</strong> El número diez se escribe 1010 en binario, 12 en octal, 10 en decimal y A en hexadecimal.</p>
+                <p><strong>Un carácter puede ocupar varios bytes.</strong> La letra A ocupa un byte en UTF-8; la ñ ocupa dos. Un código Unicode y sus bytes UTF-8 son representaciones diferentes.</p>
+            </div>
+        </aside>
+    </main>
+
+    <footer class="container page-footer">
+        <p>Python 3.12 · Django · Sistemas numéricos y codificación de caracteres</p>
+    </footer>
+</body>
+</html>

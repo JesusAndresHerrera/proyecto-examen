@@ -1,0 +1,14 @@
+.git
+.github
+.vscode
+venv
+.venv
+**/__pycache__
+**/*.py[cod]
+.env
+.env.*
+db.sqlite3
+evidencias
+work
+outputs
+*.log

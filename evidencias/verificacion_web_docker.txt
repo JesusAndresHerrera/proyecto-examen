@@ -1,0 +1,6 @@
+Comprobaciones HTTP reales contra el contenedor en http://127.0.0.1:8000/
+OK: página inicial HTTP 200.
+OK: conversión 13 base 10 -> 00001101.
+OK: 102 base 2 -> mensaje de dígito inválido.
+OK: ñ -> bytes UTF-8 C3 B1.
+OK: hoja de estilos HTTP 200.

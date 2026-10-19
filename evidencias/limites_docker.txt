@@ -1,0 +1,15 @@
+{
+  "Contenedor": "proyecto-examen-web-1",
+  "Estado": "running",
+  "Salud": "healthy",
+  "MemoriaBytes": 268435456,
+  "MemoriaMiB": 256,
+  "NanoCPUs": 1000000000,
+  "LimiteCPU": 1,
+  "Puerto": [
+    {
+      "HostIp": "127.0.0.1",
+      "HostPort": "8000"
+    }
+  ]
+}

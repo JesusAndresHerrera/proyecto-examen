@@ -1,0 +1,45 @@
+Ejecución real dentro del servicio Docker web.
+Python 3.12.15
+Django: 6.1.2
+Comando: docker compose exec -T web python manage.py test conversor -v 2
+
+Found 32 test(s).
+Skipping setup of unused database(s): default.
+System check identified no issues (0 silenced).
+test_emoji_tiene_punto_de_codigo_y_cuatro_bytes (conversor.tests.AnalisisTextoTests.test_emoji_tiene_punto_de_codigo_y_cuatro_bytes) ... ok
+test_enie_tiene_dos_bytes_utf8 (conversor.tests.AnalisisTextoTests.test_enie_tiene_dos_bytes_utf8) ... ok
+test_espacios_y_saltos_de_linea_se_conservan (conversor.tests.AnalisisTextoTests.test_espacios_y_saltos_de_linea_se_conservan) ... ok
+test_limite_veinte_cuenta_puntos_de_codigo_y_no_bytes (conversor.tests.AnalisisTextoTests.test_limite_veinte_cuenta_puntos_de_codigo_y_no_bytes) ... ok
+test_texto_ascii_y_enie_se_analiza_en_orden (conversor.tests.AnalisisTextoTests.test_texto_ascii_y_enie_se_analiza_en_orden) ... ok
+test_texto_vacio_es_invalido (conversor.tests.AnalisisTextoTests.test_texto_vacio_es_invalido) ... ok
+test_255_ocupa_exactamente_un_byte (conversor.tests.ConversionesNumeroTests.test_255_ocupa_exactamente_un_byte) ... ok
+test_256_completa_hasta_dos_bytes (conversor.tests.ConversionesNumeroTests.test_256_completa_hasta_dos_bytes) ... ok
+test_cero_se_muestra_en_un_byte_con_cero_bits_significativos (conversor.tests.ConversionesNumeroTests.test_cero_se_muestra_en_un_byte_con_cero_bits_significativos) ... ok
+test_ceros_a_la_izquierda_no_aumentan_los_bits (conversor.tests.ConversionesNumeroTests.test_ceros_a_la_izquierda_no_aumentan_los_bits) ... ok
+test_cuatro_bases_representan_el_mismo_valor (conversor.tests.ConversionesNumeroTests.test_cuatro_bases_representan_el_mismo_valor) ... ok
+test_digitos_invalidos_indican_la_base (conversor.tests.ConversionesNumeroTests.test_digitos_invalidos_indican_la_base) ... ok
+test_hexadecimal_acepta_minusculas (conversor.tests.ConversionesNumeroTests.test_hexadecimal_acepta_minusculas) ... ok
+test_limite_superior_es_valido_en_todas_las_bases (conversor.tests.ConversionesNumeroTests.test_limite_superior_es_valido_en_todas_las_bases) ... ok
+test_rechaza_bases_no_permitidas (conversor.tests.ConversionesNumeroTests.test_rechaza_bases_no_permitidas) ... ok
+test_rechaza_entrada_vacia (conversor.tests.ConversionesNumeroTests.test_rechaza_entrada_vacia) ... ok
+test_rechaza_negativos (conversor.tests.ConversionesNumeroTests.test_rechaza_negativos) ... ok
+test_rechaza_valor_fuera_del_rango_en_todas_las_bases (conversor.tests.ConversionesNumeroTests.test_rechaza_valor_fuera_del_rango_en_todas_las_bases) ... ok
+test_solo_se_permiten_digitos_ascii_sin_prefijos_ni_separadores (conversor.tests.ConversionesNumeroTests.test_solo_se_permiten_digitos_ascii_sin_prefijos_ni_separadores) ... ok
+test_formulario_distingue_error_de_base_del_numero (conversor.tests.FormulariosTests.test_formulario_distingue_error_de_base_del_numero) ... ok
+test_formulario_numero_acepta_espacios_exteriores_y_preserva_numero (conversor.tests.FormulariosTests.test_formulario_numero_acepta_espacios_exteriores_y_preserva_numero) ... ok
+test_formulario_texto_conserva_espacios_con_caracteres (conversor.tests.FormulariosTests.test_formulario_texto_conserva_espacios_con_caracteres) ... ok
+test_formulario_texto_rechaza_mas_de_veinte_caracteres (conversor.tests.FormulariosTests.test_formulario_texto_rechaza_mas_de_veinte_caracteres) ... ok
+test_formulario_texto_rechaza_solo_espacios (conversor.tests.FormulariosTests.test_formulario_texto_rechaza_solo_espacios) ... ok
+test_accion_desconocida_muestra_mensaje_claro (conversor.tests.PaginaTests.test_accion_desconocida_muestra_mensaje_claro) ... ok
+test_caracteres_html_se_escapan (conversor.tests.PaginaTests.test_caracteres_html_se_escapan) ... ok
+test_entradas_vacias_muestran_errores_especificos (conversor.tests.PaginaTests.test_entradas_vacias_muestran_errores_especificos) ... ok
+test_error_numero_preserva_la_entrada_y_no_produce_resultado (conversor.tests.PaginaTests.test_error_numero_preserva_la_entrada_y_no_produce_resultado) ... ok
+test_formularios_protegen_post_con_csrf (conversor.tests.PaginaTests.test_formularios_protegen_post_con_csrf) ... ok
+test_get_muestra_ambos_formularios_sin_errores (conversor.tests.PaginaTests.test_get_muestra_ambos_formularios_sin_errores) ... ok
+test_post_numero_no_valida_el_formulario_texto (conversor.tests.PaginaTests.test_post_numero_no_valida_el_formulario_texto) ... ok
+test_post_texto_no_valida_el_formulario_numero (conversor.tests.PaginaTests.test_post_texto_no_valida_el_formulario_numero) ... ok
+
+----------------------------------------------------------------------
+Ran 32 tests in 0.051s
+
+OK

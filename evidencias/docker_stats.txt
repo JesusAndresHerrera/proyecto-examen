@@ -1,0 +1,2 @@
+CONTAINER ID   NAME                    CPU %     MEM USAGE / LIMIT   MEM %     NET I/O           BLOCK I/O     PIDS
+4b796ac3e28c   proyecto-examen-web-1   55.33%    55.41MiB / 256MiB   21.65%    5.47kB / 34.6kB   0B / 1.52MB   2
